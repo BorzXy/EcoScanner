@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "console-title": "^1.1.0",
+    "gradient-string": "^2.0.2",
+    "node-fetch": "^2.6.6",
+    "prompt-sync": "^4.2.0"
+  }
+}
