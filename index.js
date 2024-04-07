@@ -83,8 +83,8 @@ ${log} Programming Language : ${gradient('#f5d64c','#f5d64c')("Node.js (21.7.1)"
 ${log} IP : ${gradient('#f5d64c','#f5d64c')(ip)}
 ${log} Time : ${gradient('#f5d64c','#f5d64c')(times)}
 
-${log} Player Directory : ${gradient('#f5d64c', '#f5d64c')("(C:\\DATA\\Username\\BorzXy\\PT\\GT\\EcoScanner\\players\\)")}
-${log} World Directory : ${gradient('#f5d64c', '#f5d64c')("(C:\\DATA\\Username\\BorzXy\\PT\\GT\\EcoScanner\\worlds\\)")}
+${log} Player Directory : ${gradient('#f5d64c', '#f5d64c')("(" + playersdir + ")")}
+${log} World Directory : ${gradient('#f5d64c', '#f5d64c')("(" + worldsdir + ")")}
 ${log} Registered Player Total : ${gradient('#f5d64c', '#f5d64c')(playersdirtotal)}
 ${log} Registered World Total : ${gradient('#f5d64c', '#f5d64c')(worldsdirtotal)}
 
