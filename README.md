@@ -15,4 +15,4 @@ Only Work with GTPS3 Source
 Dm borzxy at Discord
 
 # Screenshot
-![Screenshot](https://github.com/BorzXys/EcoScanner/blob/main/Screenshot.png)
+![Screenshot](https://github.com/BorzXys/EcoScanners/blob/main/Screenshot.png)
