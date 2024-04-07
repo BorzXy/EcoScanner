@@ -65,7 +65,7 @@ const MasukMenu = async () => {
     console.clear();
     var ckversion = await fetch("https://raw.githubusercontent.com/BorzXys/EcoScanner/main/ver").then(data => data.text());
     if (version != ckversion) {
-        console.log("New Version foundednew version has been found, updating...");
+        console.log("New version has been found, updating...");
         update_version();
         return;
     }
