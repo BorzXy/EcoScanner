@@ -28,7 +28,7 @@ if (month == 12) montas = "December";
 let year = date_ob.getFullYear();
 let hours = date_ob.getHours();
 var type = "", timeds = "";
-var version = "1.4\n"; //Dont change this to bypass version :)
+var version = "1.5.7\n"; //Dont change this to bypass version :)
 if (hours > 12) type = "PM";
 if (hours < 12) type = "AM";
 let minutes = date_ob.getMinutes();
@@ -51,6 +51,19 @@ var results = `[${gradient('#ad5028','#ad5028')("~")}]`;
     }
 }*/
 
+function LastOnlineC(time){
+    var a = new Date(time * 1000);
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var year = a.getFullYear();
+    var month = months[a.getMonth()];
+    var date = a.getDate();
+    var hour = a.getHours();
+    var min = a.getMinutes();
+    var sec = a.getSeconds();
+    var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
+    return time;
+}
+
 const update_version = async () => {
     var createnewfile = await fetch("https://raw.githubusercontent.com/BorzXy/EcoScanner/main/index.js").then(data => data.text());
     console.log("Please wait, writing the file!")
@@ -69,6 +82,7 @@ const MasukMenu = async () => {
         update_version();
         return;
     }
+    if (ckversion < version) return console.log("Invalid Version!\nPlease dont edit the Version :)")
     var ip = await fetch(`https://api.ipify.org`).then(data => data.text());
     title("[MENU] | Version : " + version + " | Date : " + dates)
     var banner = `${gradient('white','white')(`███████  ██████  █████  ███    ██ ███    ██ ███████ ██████  
@@ -79,7 +93,7 @@ const MasukMenu = async () => {
 
 ${log} Author : ${gradient('#f5d64c','#f5d64c')("Daritoc & BorzXy")}
 ${log} Github / Discord : ${gradient('#f5d64c','#f5d64c')("BorzXy / borzxy")}
-${log} Programming Language : ${gradient('#f5d64c','#f5d64c')("Node.js (21.7.1)")}
+
 ${log} IP : ${gradient('#f5d64c','#f5d64c')(ip)}
 ${log} Time : ${gradient('#f5d64c','#f5d64c')(times)}
 
@@ -95,6 +109,9 @@ ${log} [1] ${gradient('#f5d64c', '#f5d64c')("Role Scanner (Note: Only scan vip, 
 ${log} [2] ${gradient('#f5d64c', '#f5d64c')("Scan Economy (Note: Only Scan Dropped Item and Player Inventory)")}
 ${log} [3] ${gradient('#f5d64c', '#f5d64c')("Info Player")}
 ${log} [4] ${gradient('#f5d64c', '#f5d64c')("View Player Set (Note: You need items.json)")}
+${log} [5] ${gradient('#f5d64c', '#f5d64c')("View Player Inventory (Note: You need items.json)")}
+${log} [6] ${gradient('#f5d64c', '#f5d64c')("Track Lastest World Visited")}
+${log} [7] ${gradient('#f5d64c', '#f5d64c')("Check Player Last Online")}
 ${log} [0] ${gradient('#f5d64c', '#f5d64c')("Exit")}
     `;
     console.clear();
@@ -232,12 +249,23 @@ function Scanner (type) {
         }
         const user = playersdir + playername + "_.json";
         const data = require(user);
+        const json = JSON.parse(fs.readFileSync(playersdir + playername + "_.json").toString());
         var ip = data.ip, rid = data.rid, mac = data.mac, wk = data.wk;
-        var level = data.level, xp = data.xp, growid = data.name, modname = data.modname, password = data.pass;
+        var level = data.level, gems = data.gems, xp = data.xp, growid = data.name, modname = data.modname, password = data.pass;
         var growidc = "", growids = "";
         var drtit = data._drt, legendtt = data.legend;
         var drtits = "", legendtts = "";
         var vip = data.vip, mod = data.mod, dev = data.dev, superdev = data.superdev;
+        var is_banned = false, bantime = data.b_t, banby = data.b_b, banreason = data.b_r;
+        var banbys = "System", banreasons = "No Reason Provided!", timedban = "";
+        if (bantime >= 5) {
+            is_banned = true;
+            timedban = LastOnlineC(bantime);
+        } else {
+            is_banned = false;
+        }
+        if (banby != "") banbys = banby;
+        if (banreason != "") banreasons = banreason;
         var vips = "", mods = "", devs = "", superdevs = "";
         if (drtit == 1 || drtit == true) drtits = "This user have Doctor Title";
         if (legendtt == 1 || legendtt == true) legendtts = "This user have Legend Title";
@@ -259,9 +287,21 @@ function Scanner (type) {
         }
         if (drtit == 1 || drtit == true) growids = "Dr. " + growids;
         if (legendtt == 1 || legendtt == true) growids = growids + " of Legend";
-        console.clear();
+        var worldowned = "\n";
+        for (const world of json.worlds_owned) {
+            if (!fs.existsSync(worldsdir + world.name + "_.json")) return worldowned += `${results} Not Found\n`
+            if (fs.existsSync(worldsdir + world.name + "_.json")) {
+                const jsons = JSON.parse(fs.readFileSync(worldsdir + world.name + "_.json").toString());
+                var isnuked = "", level = "(" + jsons.entry_level + ")";
+                if (jsons.nuked == true) isnuked = `(${gradient('#ff0000','#ff0000')("Nuked")})`
+                worldowned += `${results} ${level} ${world.name} ${isnuked}\n`
+            }
+        }
+        console.log("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
         console.log(`${results} [RESULT]:`)
-        console.log(`${log} [INFORMATION]:\n${results} Grow ID : ${growids}\n${warn} Password : ${password}\n${results} XP/LEVEL : ${xp} (${level})\n`); //\n${results} Mod Name : ${modnames}\n
+        console.log(`${log} [INFORMATION]:\n${results} Grow ID : ${growids}\n${warn} Password : ${password}\n${results} XP/LEVEL : ${xp} ${level}\n${results} GEMS : ${parseInt(gems)}\n`); //\n${results} Mod Name : ${modnames}\n
+        if (is_banned) console.log(`${log} [BANNED]:\n${results} Banned by : ${banbys}\n${results} Length : ${bantime} / (Decoded : ${timedban})\n${results} Banned Reason : ${banreasons}\n`);
+        console.log(`${log} [ENTRY LEVEL / WORLD OWNED]: ${worldowned}`)
         console.log(`${log} [NETWORK]:\n${results} IP : ${ip}\n${results} RID : ${rid}\n${results} MAC : ${mac}\n${results} WK : ${wk}\n`)
         console.log(`${log} [TITLE]:\n${results} ${drtits}\n${results} ${legendtts}\n`)
         console.log(`${log} [ROLE]:\n${results} ${vips}\n${results} ${mods}\n${results} ${devs}\n${results} ${superdevs}`)
@@ -348,7 +388,114 @@ function Scanner (type) {
         console.log(`${log} [0] Exit`)
         var menu = ask(log + " > ");
         MenuTerakhir(menu);
-    } else if (type == 0) {
+    } else if (type == 5) {
+        title("[View Player Inventory] | Date : " + dates)
+        var playername = ask(who + " Player GrowID > ");
+        console.log("Please wait...")
+        if (!fs.existsSync(playersdir + playername + "_.json")) {
+            console.clear();
+            console.log(err + " Player not found!")
+            console.log(`\n${log} [1] Back to Main Menu`)
+            console.log(`${log} [0] Exit`)
+            var menu = ask(log + " > ");
+            MenuTerakhir(menu);
+            return;
+        }
+        if (!fs.existsSync("./items.json")) {
+            console.clear();
+            console.log(err + " items.json not found\n" + err + " decode your items.dat at here https://gucktubeyt.github.io/GrowTools/")
+            console.log(`\n${log} [1] Back to Main Menu`)
+            console.log(`${log} [0] Exit`)
+            var menu = ask(log + " > ");
+            MenuTerakhir(menu);
+            return;
+        }
+        const json = JSON.parse(fs.readFileSync(playersdir + playername + "_.json").toString());
+        var res = "";
+        for (const inventory of json.inv) {
+            if (inventory.i != 0) { 
+                var itemsname = "";
+                const json = JSON.parse(fs.readFileSync("./items.json").toString());
+                for (const itemfinder of json.items) {
+                    if (inventory.i == itemfinder.item_id) {
+                        itemsname = `${log} ${inventory.c} ${itemfinder.name}`
+                    }
+                }
+                res += `\n${itemsname}`
+            }
+        }
+        console.clear();
+        console.log(`${results} [RESULT]:`)
+        console.log(`${res}`)
+        console.log(`\n${log} [1] Back to Main Menu`)
+        console.log(`${log} [0] Exit`)
+        var menu = ask(log + " > ");
+        MenuTerakhir(menu);
+    } else if (type == 6) {
+        title("[Track Lastest World Visited] | Date : " + dates)
+        var worldname = ask(who + " World Name ? > ")
+        if (!fs.existsSync(worldsdir + worldname + "_.json")) {
+            console.clear();
+            console.log(err + " World not found!")
+            console.log(`\n${log} [1] Back to Main Menu`)
+            console.log(`${log} [0] Exit`)
+            var menu = ask(log + " > ");
+            MenuTerakhir(menu);
+            return;
+        }
+        fs.readdir(playersdir, (err, files) => {
+            var filter = files.filter(f => f.split(".").pop() === "json");
+            var totalitem = [];
+            let total = 0;
+            for (i = 0; i < filter.length; i++) {
+                try {
+                    const fileData = fs.readFileSync(path.join(playersdir, filter[i]));
+                    const json = JSON.parse(fileData.toString());
+                    for (_i = 0; _i < json.last_worlds.length; _i++) {
+                        if (json.last_worlds[_i].name == worldname) {
+                            if (fs.existsSync(playersdir + json.name + "_.json")) {
+                                const fileData = fs.readFileSync(path.join(playersdir, json.name + "_.json"));
+                                const jsons = JSON.parse(fileData.toString());
+                                totalitem.push(json.name + " (" + jsons.level + ")");
+                                total = total + 1;
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log(e)
+                    return;
+                }
+            }
+            console.log(`${results} Found ${total} Account`)
+            console.log(`${results} ${totalitem}`)
+            console.log(`\n${log} [1] Back to Main Menu`)
+            console.log(`${log} [0] Exit`)
+            var menu = ask(log + " > ");
+            MenuTerakhir(menu);
+        });
+    } else if (type == 7) {
+        title("[Check Player Last Online]  | Date : " + dates)
+        var playername = ask(who + " GrowID ? > ")
+        if (!fs.existsSync(playersdir + playername + "_.json")) {
+            console.clear();
+            console.log(err + " Player not found!")
+            console.log(`\n${log} [1] Back to Main Menu`)
+            console.log(`${log} [0] Exit`)
+            var menu = ask(log + " > ");
+            MenuTerakhir(menu);
+            return;
+        }
+        const json = JSON.parse(fs.readFileSync(playersdir + playername + "_.json").toString());
+        var last_online = json.last_online;
+        var laston = LastOnlineC(last_online);
+        console.clear();
+        console.log(`${results} ${playername} Last Online ${laston}`)
+        console.log(`\n${log} [1] Back to Main Menu`)
+        console.log(`${log} [0] Exit`)
+        var menu = ask(log + " > ");
+        MenuTerakhir(menu);
+    }
+    else if (type == 0) {
         console.clear();
         console.log(log + " Bye Bye")
         process.exit();
