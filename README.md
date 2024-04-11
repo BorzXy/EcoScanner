@@ -5,14 +5,7 @@ Only Work with Old GTPS3 Source
 Work with New GTPS3 Source (Soon)
 
 # Update
-[1.2]
-- Design Menu + Add Command
-
-[1.4]
-- Added View Player Set
-- Added Scan Player Inventory to Economy Scanner
-- Added Folder File Size
-- Added (Network Information, Title and Roles) to Info Player
+![Click me!](https://discord.gg/yDAg9TZhhQ)
 
 # Report a Problem or Give suggestion
 Dm borzxy at Discord
