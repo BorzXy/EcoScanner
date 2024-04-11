@@ -5,7 +5,7 @@ Only Work with Old GTPS3 Source
 Work with New GTPS3 Source (Soon)
 
 # Update
-![Click me!](https://discord.gg/yDAg9TZhhQ)
+[Click me!](https://discord.gg/yDAg9TZhhQ)
 
 # Report a Problem or Give suggestion
 Dm borzxy at Discord
