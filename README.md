@@ -1,5 +1,8 @@
 # Economy Scanner
-Only Work with GTPS3 Source
+Only Work with Old GTPS3 Source
+
+# Economy Scanner v2 [Link](https://github.com/BorzXy/EcoScanner)
+Work with New GTPS3 Source (Soon)
 
 # Update
 [1.2]
